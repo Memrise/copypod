@@ -156,7 +156,7 @@ def main():
 
     # Get details of the source pod
     try:
-        src_pod = k8s_client.read_namespaced_pod(pod_name, args.namespace, exact=True)
+        src_pod = k8s_client.read_namespaced_pod(pod_name, args.namespace)
     except ApiException as error:
         print(
             f"Error occurred when trying to get information about existing pod: {error.reason}",
