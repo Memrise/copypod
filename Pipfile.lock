@@ -276,10 +276,6 @@
             "markers": "python_version >= '3.6'",
             "version": "==4.9"
         },
-        "sanitized-package": {
-            "editable": true,
-            "path": "."
-        },
         "setuptools": {
             "hashes": [
                 "sha256:95f00380ef2ffa41d9bba85d95b27689d923c93dfbafed4aecd7cf988a25e012",
