@@ -12,5 +12,6 @@ ignore = [
     "D1",  # Missing docstrings
     "D212",  # Multi-line docstring summary should start at the first line
     "E501",  # Line too long
+    "S311",  # Standard pseudo-random generators are not suitable for cryptographic purposes
     "T201",  # `print` found
 ]
