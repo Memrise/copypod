@@ -38,11 +38,11 @@ Then you can run the program with `pipenv run copypod`.
 ## Usage
 
     $ copypod --help
-    usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE]
+    usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE] [--image IMAGE] [--cap-add CAP_ADD]
 
     Copy a Kubernetes pod and run commands in its environment.
 
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --context CONTEXT     Kubectl context to use for configuration (default: None)
       -n NAMESPACE, --namespace NAMESPACE
@@ -56,7 +56,8 @@ Then you can run the program with `pipenv run copypod`.
                             Initial command to run in the copied pod (default: sleep infinity)
       -i INTERACTIVE, --interactive INTERACTIVE
                             Command to run in an interactive console (default: None)
-      --image IMAGE         Copy the entire environment of the pod but use this Docker image instead (default: None)
+      --image IMAGE         Set to alternate Docker image to use for copied pod (default: None)
+      --cap-add CAP_ADD     Capabilities to add for the copied pod (default: None)
 
     If the `--interactive` flag is provided, the copied pod will be removed immediately after the command exits, otherwise the name of the pod will be printed.
 

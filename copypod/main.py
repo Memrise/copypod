@@ -16,6 +16,7 @@
 
 import argparse
 import getpass
+import itertools
 import random
 import shlex
 import string
@@ -51,6 +52,7 @@ def parse_cli_arguments() -> argparse.Namespace:
     )
     parser.add_argument("-i", "--interactive", type=str, help="Command to run in an interactive console")
     parser.add_argument("--image", type=str, help="Set to alternate Docker image to use for copied pod")
+    parser.add_argument("--cap-add", action="append", help="Capabilities to add for the copied pod")
     return parser.parse_args()
 
 
@@ -72,7 +74,11 @@ def random_suffix(length: int = 6) -> str:
 
 
 def prepare_pod(
-    pod: kubernetes.client.V1Pod, command: list[str], container: str | None, image: str | None
+    pod: kubernetes.client.V1Pod,
+    command: list[str],
+    container: str | None,
+    image: str | None,
+    capabilities: list[str] | None,
 ) -> kubernetes.client.V1Pod:
     # Metadata
     pod.metadata.annotations["sentry/ignore-pod-updates"] = "true"
@@ -114,6 +120,18 @@ def prepare_pod(
 
     pod.status = {}
 
+    if capabilities:
+        capabilities = list(itertools.chain.from_iterable([i.upper().split(",") for i in capabilities]))
+
+        if not pod.spec.containers[0].security_context:
+            pod.spec.containers[0].security_context = kubernetes.client.models.V1SecurityContext()
+        if not pod.spec.containers[0].security_context.capabilities:
+            pod.spec.containers[0].security_context.capabilities = kubernetes.client.models.V1Capabilities()
+        if pod.spec.containers[0].security_context.capabilities.add:
+            pod.spec.containers[0].security_context.capabilities.add.extend(capabilities)
+        else:
+            pod.spec.containers[0].security_context.capabilities.add = capabilities
+
     return pod
 
 
@@ -142,7 +160,7 @@ def main() -> None:
         sys.exit(1)
 
     # Prepare the copied pod and create it
-    dest_pod = prepare_pod(src_pod, shlex.split(args.command), args.container, args.image)
+    dest_pod = prepare_pod(src_pod, shlex.split(args.command), args.container, args.image, args.cap_add)
     try:
         k8s_client.create_namespaced_pod(args.namespace, dest_pod)
     except kubernetes.client.ApiException as error:
