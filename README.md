@@ -25,14 +25,14 @@ You can either install `copypod` into a virtual environment directly with:
     pip install git+ssh://git@github.com/Memrise/copypod.git
 
 then the program will be available as `copypod` inside the virtual environment,
-or you can install it by cloning this repository and then use `pipenv` to set
+or you can install it by cloning this repository and then use `poetry` to set
 up a virtual environment where it will get installed into:
 
     git clone git@github.com:Memrise/copypod.git
     cd copypod/
-    pipenv install
+    poetry install
 
-Then you can run the program with `pipenv run copypod`.
+Then you can run the program with `poetry run copypod`.
 
 
 ## Usage

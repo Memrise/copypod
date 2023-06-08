@@ -1,10 +1,30 @@
+[tool.poetry]
+name = "copypod"
+version = "0.1.0"
+description = "Copy a Kubernetes pod and run commands in its environment"
+authors = ["Jeppe Fihl-Pearson <jeppe@memrise.com>"]
+license = "Apache-2.0"
+repository = "https://github.com/Memrise/copypod"
+readme = "README.md"
+
+[tool.poetry.scripts]
+copypod = "copypod.main:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+kubernetes = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.black]
 line-length = 120
-target-version = ["py310"]
+target-version = ["py38"]
 skip-magic-trailing-comma = true
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py38"
 select = ["ALL"]
 ignore = [
     "COM812",  # Trailing comma missing
