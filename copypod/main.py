@@ -183,7 +183,7 @@ def main() -> None:
         command += [f"--context={args.context}"]
 
     command += ["exec", "--stdin", "--tty", pod_name, "--", *shlex.split(args.interactive)]
-    result = subprocess.run(command)  # noqa: PLW1510,S603
+    result = subprocess.run(command, check=False)  # noqa: S603
 
     try:
         k8s_client.delete_namespaced_pod(
