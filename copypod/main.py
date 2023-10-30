@@ -39,26 +39,50 @@ def parse_cli_arguments() -> argparse.Namespace:
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--context", type=str, help="Kubectl context to use for configuration")
     parser.add_argument(
-        "-n", "--namespace", type=str, default="default", help="Namespace for where the source pod is located"
+        "--context", type=str, help="Kubectl context to use for configuration"
+    )
+    parser.add_argument(
+        "-n",
+        "--namespace",
+        type=str,
+        default="default",
+        help="Namespace for where the source pod is located",
     )
     labels_pod_group = parser.add_mutually_exclusive_group(required=True)
-    labels_pod_group.add_argument("-l", "--selector", type=str, help="Label selector of pod to copy")
-    labels_pod_group.add_argument("-p", "--pod", type=str, help="Name of the pod to copy")
-    parser.add_argument(
-        "--container", type=str, help="Name of container to copy, only needed if the pod has more than one container"
+    labels_pod_group.add_argument(
+        "-l", "--selector", type=str, help="Label selector of pod to copy"
+    )
+    labels_pod_group.add_argument(
+        "-p", "--pod", type=str, help="Name of the pod to copy"
     )
     parser.add_argument(
-        "-c", "--command", type=str, default="sleep infinity", help="Initial command to run in the copied pod"
+        "--container",
+        type=str,
+        help="Name of container to copy, only needed if the pod has more than one container",
     )
-    parser.add_argument("-i", "--interactive", type=str, help="Command to run in an interactive console")
-    parser.add_argument("--image", type=str, help="Set to alternate Docker image to use for copied pod")
-    parser.add_argument("--cap-add", action="append", help="Capabilities to add for the copied pod")
+    parser.add_argument(
+        "-c",
+        "--command",
+        type=str,
+        default="sleep infinity",
+        help="Initial command to run in the copied pod",
+    )
+    parser.add_argument(
+        "-i", "--interactive", type=str, help="Command to run in an interactive console"
+    )
+    parser.add_argument(
+        "--image", type=str, help="Set to alternate Docker image to use for copied pod"
+    )
+    parser.add_argument(
+        "--cap-add", action="append", help="Capabilities to add for the copied pod"
+    )
     return parser.parse_args()
 
 
-def get_pod_matching_labels(client: kubernetes.client.CoreV1Api, selector: str, namespace: str | None) -> str:
+def get_pod_matching_labels(
+    client: kubernetes.client.CoreV1Api, selector: str, namespace: str | None
+) -> str:
     try:
         pods_list = client.list_namespaced_pod(namespace, label_selector=selector).items
         if pods_list:
@@ -67,7 +91,10 @@ def get_pod_matching_labels(client: kubernetes.client.CoreV1Api, selector: str, 
         print("No pods were found which matched the provided labels", file=sys.stderr)
         sys.exit(1)
     except kubernetes.client.ApiException as error:
-        print(f"Error occurred when trying to find pod matching labels: {error.reason}", file=sys.stderr)
+        print(
+            f"Error occurred when trying to find pod matching labels: {error.reason}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
 
@@ -85,7 +112,10 @@ def prepare_pod(
     # Metadata
     pod.metadata.annotations["sentry/ignore-pod-updates"] = "true"
     pod.metadata.creation_timestamp = None
-    pod.metadata.labels = {"creator": getpass.getuser(), "original-pod": pod.metadata.name}
+    pod.metadata.labels = {
+        "creator": getpass.getuser(),
+        "original-pod": pod.metadata.name,
+    }
     pod.metadata.name = f"pod-copy-{random_suffix()}"
     pod.metadata.owner_references = None
     pod.metadata.resource_version = None
@@ -95,13 +125,19 @@ def prepare_pod(
     found_containers = {i.name: i for i in pod.spec.containers}
     if container:
         if container not in found_containers:
-            print("Error: The specified container was not found in the pod", file=sys.stderr)
+            print(
+                "Error: The specified container was not found in the pod",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
         pod.spec.containers = [found_containers[container]]
 
     if len(pod.spec.containers) > 1:
-        print("Error: Pod contains multiple containers but `--container` wasn't specified", file=sys.stderr)
+        print(
+            "Error: Pod contains multiple containers but `--container` wasn't specified",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     pod.spec.containers[0].command = command
@@ -123,21 +159,31 @@ def prepare_pod(
     pod.status = {}
 
     if capabilities:
-        capabilities = list(itertools.chain.from_iterable([i.upper().split(",") for i in capabilities]))
+        capabilities = list(
+            itertools.chain.from_iterable([i.upper().split(",") for i in capabilities])
+        )
 
         if not pod.spec.containers[0].security_context:
-            pod.spec.containers[0].security_context = kubernetes.client.models.V1SecurityContext()
+            pod.spec.containers[
+                0
+            ].security_context = kubernetes.client.models.V1SecurityContext()
         if not pod.spec.containers[0].security_context.capabilities:
-            pod.spec.containers[0].security_context.capabilities = kubernetes.client.models.V1Capabilities()
+            pod.spec.containers[
+                0
+            ].security_context.capabilities = kubernetes.client.models.V1Capabilities()
         if pod.spec.containers[0].security_context.capabilities.add:
-            pod.spec.containers[0].security_context.capabilities.add.extend(capabilities)
+            pod.spec.containers[0].security_context.capabilities.add.extend(
+                capabilities
+            )
         else:
             pod.spec.containers[0].security_context.capabilities.add = capabilities
 
     return pod
 
 
-def wait_while_pending(k8s_client: kubernetes.client.CoreV1Api, namespace: str, pod: str) -> None:
+def wait_while_pending(
+    k8s_client: kubernetes.client.CoreV1Api, namespace: str, pod: str
+) -> None:
     while k8s_client.read_namespaced_pod(pod, namespace).status.phase == "Pending":
         time.sleep(1)
 
@@ -158,15 +204,23 @@ def main() -> None:
     try:
         src_pod = k8s_client.read_namespaced_pod(pod_name, args.namespace)
     except kubernetes.client.ApiException as error:
-        print(f"Error occurred when trying to get information about existing pod: {error.reason}", file=sys.stderr)
+        print(
+            f"Error occurred when trying to get information about existing pod: {error.reason}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # Prepare the copied pod and create it
-    dest_pod = prepare_pod(src_pod, shlex.split(args.command), args.container, args.image, args.cap_add)
+    dest_pod = prepare_pod(
+        src_pod, shlex.split(args.command), args.container, args.image, args.cap_add
+    )
     try:
         k8s_client.create_namespaced_pod(args.namespace, dest_pod)
     except kubernetes.client.ApiException as error:
-        print(f"Error occurred when trying to create copied pod: {error.reason}", file=sys.stderr)
+        print(
+            f"Error occurred when trying to create copied pod: {error.reason}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     pod_name = dest_pod.metadata.name
@@ -182,15 +236,27 @@ def main() -> None:
     if args.context:
         command += [f"--context={args.context}"]
 
-    command += ["exec", "--stdin", "--tty", pod_name, "--", *shlex.split(args.interactive)]
+    command += [
+        "exec",
+        "--stdin",
+        "--tty",
+        pod_name,
+        "--",
+        *shlex.split(args.interactive),
+    ]
     result = subprocess.run(command, check=False)  # noqa: S603
 
     try:
         k8s_client.delete_namespaced_pod(
-            pod_name, args.namespace, body=kubernetes.client.V1DeleteOptions(grace_period_seconds=1)
+            pod_name,
+            args.namespace,
+            body=kubernetes.client.V1DeleteOptions(grace_period_seconds=1),
         )
     except kubernetes.client.ApiException as error:
         print(error)
-        print(f"Error occurred when trying to delete copied pod: {error.reason}", file=sys.stderr)
+        print(
+            f"Error occurred when trying to delete copied pod: {error.reason}",
+            file=sys.stderr,
+        )
 
     sys.exit(result.returncode)
