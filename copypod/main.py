@@ -150,6 +150,7 @@ def prepare_pod(
     pod.spec.containers[0].resources = None
 
     pod.spec.affinity = None
+    pod.spec.node_name = None
 
     if image:
         pod.spec.containers[0].image = image
