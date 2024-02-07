@@ -20,6 +20,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 target-version = "py38"
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "COM812",  # Trailing comma missing
@@ -32,8 +34,8 @@ ignore = [
     "T201",  # `print` found
 ]
 
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
 [tool.ruff.format]
 skip-magic-trailing-comma = true
-
-[tool.ruff.isort]
-split-on-trailing-comma = false
