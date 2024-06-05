@@ -38,7 +38,7 @@ Then you can run the program with `poetry run copypod`.
 ## Usage
 
     $ copypod --help
-    usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE] [--image IMAGE] [--cap-add CAP_ADD]
+    usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE] [--image IMAGE] [--cap-add CAP_ADD] [--node-name NODE_NAME]
 
     Copy a Kubernetes pod and run commands in its environment.
 
@@ -58,6 +58,7 @@ Then you can run the program with `poetry run copypod`.
                             Command to run in an interactive console (default: None)
       --image IMAGE         Set to alternate Docker image to use for copied pod (default: None)
       --cap-add CAP_ADD     Capabilities to add for the copied pod (default: None)
+      --node-name NODE_NAME Set the node the pod should run on
 
     If the `--interactive` flag is provided, the copied pod will be removed immediately after the command exits, otherwise the name of the pod will be printed.
 

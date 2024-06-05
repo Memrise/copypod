@@ -77,6 +77,9 @@ def parse_cli_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--cap-add", action="append", help="Capabilities to add for the copied pod"
     )
+    parser.add_argument(
+        "--node-name", type=str, help="Set the node the pod should run on"
+    )
     return parser.parse_args()
 
 
@@ -108,6 +111,7 @@ def prepare_pod(
     container: str | None,
     image: str | None,
     capabilities: list[str] | None,
+    node_name: str | None = None,
 ) -> kubernetes.client.V1Pod:
     # Metadata
     pod.metadata.annotations["sentry/ignore-pod-updates"] = "true"
@@ -150,7 +154,7 @@ def prepare_pod(
     pod.spec.containers[0].resources = None
 
     pod.spec.affinity = None
-    pod.spec.node_name = None
+    pod.spec.node_name = node_name
 
     if image:
         pod.spec.containers[0].image = image
@@ -213,7 +217,12 @@ def main() -> None:
 
     # Prepare the copied pod and create it
     dest_pod = prepare_pod(
-        src_pod, shlex.split(args.command), args.container, args.image, args.cap_add
+        src_pod,
+        shlex.split(args.command),
+        args.container,
+        args.image,
+        args.cap_add,
+        args.node_name,
     )
     try:
         k8s_client.create_namespaced_pod(args.namespace, dest_pod)

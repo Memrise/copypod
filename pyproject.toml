@@ -30,6 +30,7 @@ ignore = [
     "D212",  # Multi-line docstring summary should start at the first line
     "E501",  # Line too long
     "ISC001",  # Implicitly concatenated string literals on one line
+    "PLR0913", # Too many arguments in function definition
     "S311",  # Standard pseudo-random generators are not suitable for cryptographic purposes
     "T201",  # `print` found
 ]
