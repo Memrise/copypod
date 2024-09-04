@@ -110,6 +110,8 @@ def prepare_pod(
     capabilities: list[str] | None,
 ) -> kubernetes.client.V1Pod:
     # Metadata
+    if pod.metadata.annotations is None:
+        pod.metadata.annotations = {}
     pod.metadata.annotations["sentry/ignore-pod-updates"] = "true"
     pod.metadata.creation_timestamp = None
     pod.metadata.labels = {
