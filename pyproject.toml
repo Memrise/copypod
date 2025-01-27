@@ -1,21 +1,23 @@
-[tool.poetry]
+[project]
 name = "copypod"
-version = "0.1.0"
+version = "0.2.0"
 description = "Copy a Kubernetes pod and run commands in its environment"
-authors = ["Jeppe Fihl-Pearson <jeppe@memrise.com>"]
-license = "Apache-2.0"
-repository = "https://github.com/Memrise/copypod"
 readme = "README.md"
+license = "Apache-2.0"
+authors = [
+    { name = "Jeppe Fihl-Pearson", email =  "jeppe@memrise.com>" },
+]
+dependencies = ["kubernetes >= 31.0.0, < 32.0.0"]
+requires-python = ">= 3.9"
 
-[tool.poetry.scripts]
+[project.scripts]
 copypod = "copypod.main:main"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-kubernetes = "*"
+[project.urls]
+repository = "https://github.com/Memrise/copypod"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core >= 2.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
