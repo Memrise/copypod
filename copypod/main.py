@@ -86,7 +86,7 @@ def get_pod_matching_labels(
     try:
         pods_list = client.list_namespaced_pod(namespace, label_selector=selector).items
         if pods_list:
-            return cast(str, pods_list[0].metadata.name)
+            return cast("str", pods_list[0].metadata.name)
 
         print("No pods were found which matched the provided labels", file=sys.stderr)
         sys.exit(1)
