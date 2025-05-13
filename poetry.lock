@@ -373,13 +373,14 @@ rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 
 [[package]]
 name = "rsa"
-version = "4.2"
+version = "4.9.1"
 description = "Pure-Python RSA implementation"
 optional = false
-python-versions = "*"
+python-versions = "<4,>=3.6"
 groups = ["main"]
 files = [
-    {file = "rsa-4.2.tar.gz", hash = "sha256:aaefa4b84752e3e99bd8333a2e1e3e7a7da64614042bd66f775573424370108a"},
+    {file = "rsa-4.9.1-py3-none-any.whl", hash = "sha256:68635866661c6836b8d39430f97a996acbd61bfa49406748ea243539fe239762"},
+    {file = "rsa-4.9.1.tar.gz", hash = "sha256:e7bdbfdb5497da4c07dfd35530e1a902659db6ff241e39d9953cad06ebd0ae75"},
 ]
 
 [package.dependencies]
@@ -434,5 +435,5 @@ test = ["websockets"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">= 3.9"
-content-hash = "f7e1692a04097e9f65726a170f7a4fdef72876f53900f59036b484596357bef1"
+python-versions = ">= 3.9, < 4"
+content-hash = "d54889ac9fd2364af9eb00580bc11496f8cebf48ee1559132ba41f63aad9898f"
