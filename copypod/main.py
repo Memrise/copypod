@@ -28,6 +28,7 @@ import time
 from typing import cast
 
 import kubernetes
+import urllib3
 
 
 def parse_cli_arguments() -> argparse.Namespace:
@@ -197,8 +198,21 @@ def main() -> None:
     pod_name = args.pod
 
     kube_config_kwargs = {"context": args.context} if args.context else {}
-    kubernetes.config.load_config(**kube_config_kwargs)
-    k8s_client = kubernetes.client.CoreV1Api()
+
+    configuration = None
+    if sys.version_info >= (3, 13):
+        # Disable SSL verification if using Python 3.13+.
+        # See https://github.com/kubernetes-client/python/issues/2394.
+        configuration = kubernetes.client.Configuration()
+        configuration.verify_ssl = False
+        urllib3.disable_warnings()
+
+    kubernetes.config.load_config(
+        client_configuration=configuration, **kube_config_kwargs
+    )
+
+    api_client = kubernetes.client.ApiClient(configuration)
+    k8s_client = kubernetes.client.CoreV1Api(api_client)
 
     if args.selector:
         pod_name = get_pod_matching_labels(k8s_client, args.selector, args.namespace)

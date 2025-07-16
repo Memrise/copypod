@@ -7,10 +7,7 @@ license = "Apache-2.0"
 authors = [
     { name = "Jeppe Fihl-Pearson", email =  "jeppe@memrise.com>" },
 ]
-dependencies = [
-    "kubernetes >= 32.0.1, < 33.0.0",
-    "urllib3 < 2.4.0",
-]
+dependencies = ["kubernetes >= 33.0.0, < 34.0.0"]
 requires-python = ">= 3.9, < 4"
 
 [project.scripts]
@@ -24,7 +21,7 @@ requires = ["poetry-core >= 2.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-target-version = "py313"
+target-version = "py39"
 
 [tool.ruff.lint]
 select = ["ALL"]
