@@ -30,9 +30,12 @@ from typing import cast
 import kubernetes
 import urllib3
 
+from copypod import __version__
+
 
 def parse_cli_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
+        prog=f"copypod {__version__}",
         description="Copy a Kubernetes pod and run commands in its environment.",
         epilog=(
             "If the `--interactive` flag is provided, the copied pod will be removed "

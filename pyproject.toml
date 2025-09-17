@@ -1,6 +1,6 @@
 [project]
 name = "copypod"
-version = "0.2.0"
+version = "0.3.0"
 description = "Copy a Kubernetes pod and run commands in its environment"
 readme = "README.md"
 license = "Apache-2.0"
