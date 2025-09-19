@@ -31,26 +31,29 @@ $ pipx install copypod
 ## Usage
 
     $ copypod --help
-    usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE] [--image IMAGE] [--cap-add CAP_ADD]
+    usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE] [--image IMAGE]
+                   [--cap-add CAP_ADD] [-s SUFFIX] [-e ENV]
 
     Copy a Kubernetes pod and run commands in its environment.
 
     options:
       -h, --help            show this help message and exit
       --context CONTEXT     Kubectl context to use for configuration (default: None)
-      -n NAMESPACE, --namespace NAMESPACE
+      -n, --namespace NAMESPACE
                             Namespace for where the source pod is located (default: default)
-      -l SELECTOR, --selector SELECTOR
+      -l, --selector SELECTOR
                             Label selector of pod to copy (default: None)
-      -p POD, --pod POD     Name of the pod to copy (default: None)
+      -p, --pod POD         Name of the pod to copy (default: None)
       --container CONTAINER
                             Name of container to copy, only needed if the pod has more than one container (default: None)
-      -c COMMAND, --command COMMAND
+      -c, --command COMMAND
                             Initial command to run in the copied pod (default: sleep infinity)
-      -i INTERACTIVE, --interactive INTERACTIVE
+      -i, --interactive INTERACTIVE
                             Command to run in an interactive console (default: None)
       --image IMAGE         Set to alternate Docker image to use for copied pod (default: None)
-      --cap-add CAP_ADD     Capabilities to add for the copied pod (default: None)
+      --cap-add CAP_ADD     Capabilities to add for the copied pod, can be specified multiple times (default: None)
+      -s, --suffix SUFFIX   Set custom suffix for the new pod, otherwise a random suffix is generated (default: None)
+      -e, --env ENV         Environment variable to set (NAME=value), can be specified multiple times (default: None)
 
     If the `--interactive` flag is provided, the copied pod will be removed immediately after the command exits, otherwise the name of the pod will be printed.
 
