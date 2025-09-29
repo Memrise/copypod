@@ -7,7 +7,7 @@ license = "Apache-2.0"
 authors = [
     { name = "Jeppe Fihl-Pearson", email =  "jeppe@memrise.com>" },
 ]
-dependencies = ["kubernetes >= 33.0.0, < 34.0.0"]
+dependencies = ["kubernetes >=34.1.0, <34.2.0"]
 requires-python = ">= 3.9, < 4"
 
 [project.scripts]
