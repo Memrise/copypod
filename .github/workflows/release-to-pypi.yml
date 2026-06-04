@@ -38,7 +38,7 @@ jobs:
           path: dist/
 
   upload:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     needs:
       - build
