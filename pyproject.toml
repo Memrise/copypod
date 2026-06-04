@@ -7,14 +7,37 @@ license = "Apache-2.0"
 authors = [
     { name = "Jeppe Fihl-Pearson", email =  "jeppe@memrise.com" },
 ]
+keywords = ["kubernetes", "cli", "devops"]
 dependencies = ["kubernetes >=36.0.2, <36.1.0"]
 requires-python = ">= 3.10"
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: System :: Distributed Computing",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
 
 [project.scripts]
 copypod = "copypod.main:main"
 
 [project.urls]
-repository = "https://github.com/Memrise/copypod"
+Homepage = "https://github.com/Memrise/copypod"
+Documentation = "https://github.com/Memrise/copypod/blob/main/README.md"
+Repository = "https://github.com/Memrise/copypod"
+Issues = "https://github.com/Memrise/copypod/issues"
+Changelog = "https://github.com/Memrise/copypod/releases"
 
 [build-system]
 requires = ["hatchling"]
