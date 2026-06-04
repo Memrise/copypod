@@ -14,7 +14,11 @@ requires-python = ">= 3.10"
 copypod = "copypod.main:main"
 
 [project.urls]
-repository = "https://github.com/Memrise/copypod"
+Homepage = "https://github.com/Memrise/copypod"
+Documentation = "https://github.com/Memrise/copypod/blob/main/README.md"
+Repository = "https://github.com/Memrise/copypod"
+Issues = "https://github.com/Memrise/copypod/issues"
+Changelog = "https://github.com/Memrise/copypod/releases"
 
 [build-system]
 requires = ["hatchling"]
