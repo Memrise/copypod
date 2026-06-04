@@ -5,7 +5,7 @@ description = "Copy a Kubernetes pod and run commands in its environment"
 readme = "README.md"
 license = "Apache-2.0"
 authors = [
-    { name = "Jeppe Fihl-Pearson", email =  "jeppe@memrise.com>" },
+    { name = "Jeppe Fihl-Pearson", email =  "jeppe@memrise.com" },
 ]
 dependencies = ["kubernetes >=36.0.2, <36.1.0"]
 requires-python = ">= 3.10"
@@ -17,11 +17,11 @@ copypod = "copypod.main:main"
 repository = "https://github.com/Memrise/copypod"
 
 [build-system]
-requires = ["poetry-core >= 2.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.ruff]
-target-version = "py310"
+[tool.hatch.build.targets.sdist]
+only-include = ["copypod"]
 
 [tool.ruff.lint]
 select = ["ALL"]
