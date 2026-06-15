@@ -32,7 +32,8 @@ $ pipx install copypod
 
     $ copypod --help
     usage: copypod [-h] [--context CONTEXT] [-n NAMESPACE] (-l SELECTOR | -p POD) [--container CONTAINER] [-c COMMAND] [-i INTERACTIVE] [--image IMAGE]
-                   [--cap-add CAP_ADD] [-s SUFFIX] [-e ENV]
+                   [--cap-add CAP_ADD] [-s SUFFIX] [-e ENV] [--limit-cpu LIMIT_CPU] [--limit-memory LIMIT_MEMORY] [--request-cpu REQUEST_CPU]
+                   [--request-memory REQUEST_MEMORY]
 
     Copy a Kubernetes pod and run commands in its environment.
 
@@ -54,6 +55,14 @@ $ pipx install copypod
       --cap-add CAP_ADD     Capabilities to add for the copied pod, can be specified multiple times (default: None)
       -s, --suffix SUFFIX   Set custom suffix for the new pod, otherwise a random suffix is generated (default: None)
       -e, --env ENV         Environment variable to set (NAME=value), can be specified multiple times (default: None)
+      --limit-cpu LIMIT_CPU
+                            Set CPU limit for the copied pod. '1' = one core, '500m' = half a core (default: None)
+      --limit-memory LIMIT_MEMORY
+                            Set memory limit for the copied pod. E.g. '256Mi', '1Gi' (default: None)
+      --request-cpu REQUEST_CPU
+                            Set requested CPU for the copied pod. '1' = one core, '500m' = half a core (default: None)
+      --request-memory REQUEST_MEMORY
+                            Set requested memory for the copied pod. E.g. '256Mi', '1Gi' (default: None)
 
     If the `--interactive` flag is provided, the copied pod will be removed immediately after the command exits, otherwise the name of the pod will be printed.
 
