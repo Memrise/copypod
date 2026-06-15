@@ -88,6 +88,26 @@ def parse_cli_arguments() -> argparse.Namespace:
         action="append",
         help="Environment variable to set (NAME=value), can be specified multiple times",
     )
+    parser.add_argument(
+        "--limit-cpu",
+        type=str,
+        help="Set CPU limit for the copied pod. '1' = one core, '500m' = half a core",
+    )
+    parser.add_argument(
+        "--limit-memory",
+        type=str,
+        help="Set memory limit for the copied pod. E.g. '256Mi', '1Gi'",
+    )
+    parser.add_argument(
+        "--request-cpu",
+        type=str,
+        help="Set requested CPU for the copied pod. '1' = one core, '500m' = half a core",
+    )
+    parser.add_argument(
+        "--request-memory",
+        type=str,
+        help="Set requested memory for the copied pod. E.g. '256Mi', '1Gi'",
+    )
     return parser.parse_args()
 
 
@@ -126,6 +146,13 @@ def main() -> None:
         pod = pod_config.set_pod_name(pod, args.suffix)
         pod = pod_config.configure_container(pod, args.command, args.image, args.env)
         pod = pod_config.add_capabilities(pod, args.cap_add)
+        pod = pod_config.set_resources(
+            pod,
+            limit_cpu=args.limit_cpu,
+            limit_memory=args.limit_memory,
+            request_cpu=args.request_cpu,
+            request_memory=args.request_memory,
+        )
 
         kube.create_pod(client, pod)
         kube.wait_until_running(client, pod)

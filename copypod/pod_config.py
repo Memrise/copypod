@@ -20,7 +20,13 @@ from getpass import getuser
 from itertools import chain
 from random import choices
 
-from kubernetes.client import V1Capabilities, V1EnvVar, V1Pod, V1SecurityContext
+from kubernetes.client import (
+    V1Capabilities,
+    V1EnvVar,
+    V1Pod,
+    V1ResourceRequirements,
+    V1SecurityContext,
+)
 
 from .exceptions import CopypodError
 
@@ -71,6 +77,10 @@ def clear_fields(pod: V1Pod) -> V1Pod:
     pod.spec.containers[0].readiness_probe = None
     pod.spec.containers[0].startup_probe = None
     pod.spec.containers[0].resources = None
+
+    pod.spec.containers[0].resources = V1ResourceRequirements(
+        requests={"memory": "1Gi"}
+    )
 
     pod.spec.affinity = None
     pod.spec.node_name = None
@@ -132,5 +142,31 @@ def add_capabilities(pod: V1Pod, capabilities: list[str]) -> V1Pod:
         pod.spec.containers[0].security_context.capabilities.add.extend(capabilities)
     else:
         pod.spec.containers[0].security_context.capabilities.add = capabilities
+
+    return pod
+
+
+def set_resources(
+    pod: V1Pod,
+    limit_cpu: str | None,
+    limit_memory: str | None,
+    request_cpu: str | None,
+    request_memory: str | None,
+) -> V1Pod:
+    limits = {}
+    if limit_cpu:
+        limits["cpu"] = limit_cpu
+    if limit_memory:
+        limits["memory"] = limit_memory
+
+    requests = {}
+    if request_cpu:
+        requests["cpu"] = limit_cpu
+    if request_memory:
+        requests["memory"] = limit_memory
+
+    pod.spec.containers[0].resources = V1ResourceRequirements(
+        limits=limits, requests=requests
+    )
 
     return pod
